@@ -1,98 +1,123 @@
 var fs = require("fs");
 var Jimp = require("jimp");
 
-const resolution = 1024;
+const RESOLUTION = 1024,    // resolution of the resulting pic
+	ITER_COUNT = 25,        // number of iterations to be processed
+	RANDOM_FILTERS = true   // randomize what filters will be used
+	USE_CIRCLES = true,     // enable the "circles" filter
+	USE_SINLINES = true,    // enable the "sinlines" filter
+	USE_SWIRL = true,       // enable the "swirl" filter
+	USE_TANGRAD = true,     // enable the "tangrad" filter
+	USE_TEST = false;       // enable testing of the custom filter
 
 
 
-var stream = fs.createWriteStream("morph.log", {flags:'a'});
+
+var usable_filters = [];
+if (RANDOM_FILTERS) {
+
+	if (getRandomInt(0, 4)) usable_filters.push("circles");
+	if (getRandomInt(0, 4)) usable_filters.push("sinlines");
+	if (getRandomInt(0, 4)) usable_filters.push("swirl");
+	if (getRandomInt(0, 4)) usable_filters.push("tangrad");
+
+} else {
+
+	if (USE_CIRCLES)  usable_filters.push("circles");
+	if (USE_SINLINES) usable_filters.push("sinlines");
+	if (USE_SWIRL)    usable_filters.push("swirl");
+	if (USE_TANGRAD)  usable_filters.push("tangrad");
+	if (USE_TEST)     usable_filters.push("testfilter");
+}
+
+
+var stream = fs.createWriteStream("morph.log", {flags:'a'})
 
 fs.writeFile('morph.log', '', function(err){if (err) console.log(err)}) // clean file
 stream.write("start \n");
 
 
 function getRandomInt(min, max) {
-	return Math.floor(Math.random() * (max - min)) + min;
+	return Math.floor(Math.random() * (max + 1 - min)) + min
 }
 
 
-var image = new Jimp(resolution, resolution, function (err, image) {
+var image = new Jimp(RESOLUTION, RESOLUTION, function (err, image) {
 
 	var again = 0
 
-	for (var i = 1; i < 26; i++) {
+	for (var i = 1; i <= ITER_COUNT; i++) {
 
-		stream.write("iteration " + i + '\n')
+		stream.write('\n' + "iteration " + i + '\n')
 
 		if (!again) {
-			var rdptX = getRandomInt(-resolution, resolution*2),
-				rdptY = getRandomInt(-resolution, resolution*2)
-		} else if (getRandomInt(0, 2)) {
-			rdptX += getRandomInt(-50, 50)
-			rdptY += getRandomInt(-50, 50)
+			var randPtX = getRandomInt(-RESOLUTION, RESOLUTION*2),
+				randPtY = getRandomInt(-RESOLUTION, RESOLUTION*2)
+		} else if (getRandomInt(0, 1)) {
+			randPtX += getRandomInt(-50, 50)
+			randPtY += getRandomInt(-50, 50)
 		}
 
-		var rdpow = getRandomInt(0, 5),
-			radius = getRandomInt(10, resolution/2),
-			again = getRandomInt (0, 2)
+		var randPow = getRandomInt(0, 5),
+			radius = getRandomInt(10, RESOLUTION/2),
+			again = getRandomInt (0, 1)
 
-		switch (getRandomInt(0, 4)) {
-			case 0:
-				circles(this, rdptX, rdptY, rdpow, radius)
-				stream.write("circles at X = " + rdptX + " Y = " + rdptY + " radius = " + radius + "\n")
+
+		switch (usable_filters[Math.floor(Math.random() * usable_filters.length)]) {
+			case "testfilter": 
+				testfilter(this, randPtX, randPtY, randPow, radius)
+				stream.write("TESTING A NEW FILTER at X = " + randPtX + " Y = " + randPtY + " radius = " + radius + "\n")
 				break;
-			case 1:
-				sinlines(this, rdptX, rdptY, rdpow, radius)
-				stream.write("sinlines at X = " + rdptX + " Y = " + rdptY + " radius = " + radius + "\n")
+			case "circles":
+				circles(this, randPtX, randPtY, randPow, radius)
+				stream.write("circles at X = " + randPtX + " Y = " + randPtY + " radius = " + radius + "\n")
 				break;
-			case 2:
-				swirl(this, rdptX, rdptY, rdpow, radius)
-				stream.write("swirl at X = " + rdptX + " Y = " + rdptY + " radius = " + radius + "\n")
+			case "sinlines":
+				sinlines(this, randPtX, randPtY, randPow, radius)
+				stream.write("sinlines at X = " + randPtX + " Y = " + randPtY + " radius = " + radius + "\n")
 				break;
-			case 3:
-				tangrad(this, rdptX, rdptY, rdpow, radius)
-				stream.write("tangrad at X = " + rdptX + " Y = " + rdptY + " radius = " + radius + "\n")
+			case "swirl":
+				swirl(this, randPtX, randPtY, randPow, radius)
+				stream.write("swirl at X = " + randPtX + " Y = " + randPtY + " radius = " + radius + "\n")
 				break;
+			case "tangrad":
+				tangrad(this, randPtX, randPtY, randPow, radius)
+				stream.write("tangrad at X = " + randPtX + " Y = " + randPtY + " radius = " + radius + "\n")
+				break;
+			case "default":
+				stream.write("none of the filters could be applied")
 		}
-
-		// testfilter(this, rdptX, rdptY, rdpow, radius)
 
 		image.write( "outp" + i + ".png" );
 	
 	}
-
-	image.scan(0, 0, image.bitmap.width, image.bitmap.height, function (x, y, idx) {
-		this.bitmap.data[ idx + 3 ] = 255
-	});
-
-	image.write("outpfinal.png")
 });
 
 
-function circles(image, rdPtX, rdPtY, rdPow, radius) {
+function circles(image, randPtX, randPtY, randPow, radius) {
 	var colA = [getRandomInt(0, 255), getRandomInt(0, 255), getRandomInt(0, 255), getRandomInt(0, 200)], colB = [getRandomInt(0, 255), getRandomInt(0, 255), getRandomInt(0, 255), getRandomInt(0, 255)]
 
 	image.scan(0, 0, image.bitmap.width, image.bitmap.height, function (x, y, idx) {      
 
-			var xpercent = x / (resolution - 1), 
-				ypercent = y / (resolution - 1)
+			var xpercent = x / (RESOLUTION - 1), 
+				ypercent = y / (RESOLUTION - 1)
 
-			this.bitmap.data[ idx + 0 ] = Math.abs(this.bitmap.data[ idx + 0 ] - colA[0] * (dist ([rdPtX, rdPtY], [x, y]) / radius ) )
-			this.bitmap.data[ idx + 1 ] = Math.abs(this.bitmap.data[ idx + 1 ] - colA[1] * (dist ([rdPtX, rdPtY], [x, y]) / radius ) )
-			this.bitmap.data[ idx + 2 ] = Math.abs(this.bitmap.data[ idx + 2 ] - colA[2] * (dist ([rdPtX, rdPtY], [x, y]) / radius ) )
+			this.bitmap.data[ idx + 0 ] = Math.abs(this.bitmap.data[ idx + 0 ] - colA[0] * (dist ([randPtX, randPtY], [x, y]) / radius ) )
+			this.bitmap.data[ idx + 1 ] = Math.abs(this.bitmap.data[ idx + 1 ] - colA[1] * (dist ([randPtX, randPtY], [x, y]) / radius ) )
+			this.bitmap.data[ idx + 2 ] = Math.abs(this.bitmap.data[ idx + 2 ] - colA[2] * (dist ([randPtX, randPtY], [x, y]) / radius ) )
 			this.bitmap.data[ idx + 3 ] = 255
 			
 	});
 }
 
 
-function sinlines(image, rdPtX, rdPtY, rdPow, radius) {
+function sinlines(image, randPtX, randPtY, randPow, radius) {
 	var colA = [getRandomInt(0, 255), getRandomInt(0, 255), getRandomInt(0, 255), getRandomInt(0, 200)], colB = [getRandomInt(0, 255), getRandomInt(0, 255), getRandomInt(0, 255), getRandomInt(0, 255)]
 
 	image.scan(0, 0, image.bitmap.width, image.bitmap.height, function (x, y, idx) {      
 
-			var xpercent = x / (resolution - 1), 
-				ypercent = y / (resolution - 1)
+			var xpercent = x / (RESOLUTION - 1), 
+				ypercent = y / (RESOLUTION - 1)
 
 			this.bitmap.data[ idx + 0 ] = Math.abs(this.bitmap.data[ idx + 0 ] + 127 + 0.5 * colA[0] * Math.sin(xpercent + ypercent))
 			this.bitmap.data[ idx + 1 ] = Math.abs(this.bitmap.data[ idx + 0 ] + 127 + 0.5 * colA[1] * Math.sin(xpercent + ypercent))
@@ -102,33 +127,30 @@ function sinlines(image, rdPtX, rdPtY, rdPow, radius) {
 }
 
 
-function swirl(image, rdPtX, rdPtY, rdPow, radius) {
+function swirl(image, randPtX, randPtY, randPow, radius) {
 	var colA = [getRandomInt(0, 255), getRandomInt(0, 255), getRandomInt(0, 255), getRandomInt(0, 200)], colB = [getRandomInt(0, 255), getRandomInt(0, 255), getRandomInt(0, 255), getRandomInt(0, 255)]
 
 	image.scan(0, 0, image.bitmap.width, image.bitmap.height, function (x, y, idx) {      
 
-			var xpercent = x / (resolution - 1), 
-				ypercent = y / (resolution - 1)
+			var xpercent = x / (RESOLUTION - 1), 
+				ypercent = y / (RESOLUTION - 1)
 
-			this.bitmap.data[ idx + 0 ] = Math.abs(this.bitmap.data[ idx + 0 ] - colA[0] * (1 / dist ([rdPtX, rdPtY], [x, y]) * radius ) )
-			this.bitmap.data[ idx + 1 ] = Math.abs(this.bitmap.data[ idx + 1 ] - colA[1] * (1 / dist ([rdPtX, rdPtY], [x, y]) * radius ) )
-			this.bitmap.data[ idx + 2 ] = Math.abs(this.bitmap.data[ idx + 2 ] - colA[2] * (1 / dist ([rdPtX, rdPtY], [x, y]) * radius ) )
+			this.bitmap.data[ idx + 0 ] = Math.abs(this.bitmap.data[ idx + 0 ] - colA[0] * (1 / dist ([randPtX, randPtY], [x, y]) * radius ) )
+			this.bitmap.data[ idx + 1 ] = Math.abs(this.bitmap.data[ idx + 1 ] - colA[1] * (1 / dist ([randPtX, randPtY], [x, y]) * radius ) )
+			this.bitmap.data[ idx + 2 ] = Math.abs(this.bitmap.data[ idx + 2 ] - colA[2] * (1 / dist ([randPtX, randPtY], [x, y]) * radius ) )
 			this.bitmap.data[ idx + 3 ] = 255
 			
 	});
 }
 
 
-function tangrad(image, rdPtX, rdPtY, rdPow, radius) {
+function tangrad(image, randPtX, randPtY, randPow, radius) {
 	var colA = [getRandomInt(0, 255), getRandomInt(0, 255), getRandomInt(0, 255), getRandomInt(0, 200)], colB = [getRandomInt(0, 255), getRandomInt(0, 255), getRandomInt(0, 255), getRandomInt(0, 255)]
-
-	// rdptX = 0
-	// rdptY = 0
 
 	image.scan(0, 0, image.bitmap.width, image.bitmap.height, function (x, y, idx) {      
 
-			var xpercent = x / (resolution - 1), 
-				ypercent = y / (resolution - 1)
+			var xpercent = x / (RESOLUTION - 1), 
+				ypercent = y / (RESOLUTION - 1)
 
 			this.bitmap.data[ idx + 0 ] = Math.abs(this.bitmap.data[ idx + 0 ] - colA[0] * Math.tan(xpercent) - colB[0] * Math.tan(ypercent))
 			this.bitmap.data[ idx + 1 ] = Math.abs(this.bitmap.data[ idx + 1 ] - colA[1] * Math.tan(xpercent) - colB[1] * Math.tan(ypercent))
@@ -138,13 +160,13 @@ function tangrad(image, rdPtX, rdPtY, rdPow, radius) {
 }
 
 
-function gradient(image, rdPtX, rdPtY, rdPow, radius) {
+function gradient(image, randPtX, randPtY, randPow, radius) {
 	var colA = [getRandomInt(0, 255), getRandomInt(0, 255), getRandomInt(0, 255), getRandomInt(0, 200)], colB = [getRandomInt(0, 255), getRandomInt(0, 255), getRandomInt(0, 255), getRandomInt(0, 255)]
 
 	image.scan(0, 0, image.bitmap.width, image.bitmap.height, function (x, y, idx) {      
 
-			var xpercent = x / (resolution - 1), 
-				ypercent = y / (resolution - 1)
+			var xpercent = x / (RESOLUTION - 1), 
+				ypercent = y / (RESOLUTION - 1)
 
 			this.bitmap.data[ idx + 0 ] = Math.abs(this.bitmap.data[ idx + 0 ] - (xpercent * colA[0] + (1 - xpercent) * colB[0]))
 			this.bitmap.data[ idx + 1 ] = Math.abs(this.bitmap.data[ idx + 1 ] - (xpercent * colA[1] + (1 - xpercent) * colB[1]))
@@ -154,16 +176,16 @@ function gradient(image, rdPtX, rdPtY, rdPow, radius) {
 }
 
 
-function testfilter(image, rdPtX, rdPtY, rdPow, radius) {
+function testfilter(image, randPtX, randPtY, randPow, radius) {
 	var colA = [getRandomInt(0, 255), getRandomInt(0, 255), getRandomInt(0, 255), getRandomInt(0, 200)], colB = [getRandomInt(0, 255), getRandomInt(0, 255), getRandomInt(0, 255), getRandomInt(0, 255)]
 
-	// rdptX = 0
-	// rdptY = 0
+	// randPtX = 0
+	// randPtY = 0
 
 	image.scan(0, 0, image.bitmap.width, image.bitmap.height, function (x, y, idx) {      
 
-			var xpercent = x / (resolution - 1), 
-				ypercent = y / (resolution - 1)
+			var xpercent = x / (RESOLUTION - 1), 
+				ypercent = y / (RESOLUTION - 1)
 
 			this.bitmap.data[ idx + 0 ] = Math.abs(this.bitmap.data[ idx + 0 ] - colA[0] * Math.tan(xpercent / ypercent) )
 			this.bitmap.data[ idx + 1 ] = Math.abs(this.bitmap.data[ idx + 1 ] - colA[1] * Math.tan(xpercent / ypercent) )

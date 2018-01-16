@@ -1,5 +1,5 @@
 {
-  "name": "skuld-image-gen",
+  "name": "laiza-image-gen",
   "version": "0.0.1",
   "description": "a simple abstract image generator",
   "main": "main.js",
@@ -8,7 +8,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+git@github.com:Bielwenass/skuld.git"
+    "url": "https://github.com/Bielwenass/laiza-image-gen.git"
   },
   "keywords": [
     "abstract",
@@ -18,9 +18,9 @@
   "author": "Bielwenass",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/Bielwenass/skuld/issues"
+    "url": "https://github.com/Bielwenass/laiza-image-gen/issues"
   },
-  "homepage": "https://github.com/Bielwenass/skuld#readme",
+  "homepage": "https://github.com/Bielwenass/laiza-image-gen#readme",
   "dependencies": {
     "fs": "0.0.1-security",
     "jimp": "^0.2.28"
