@@ -1,0 +1,28 @@
+{
+  "name": "skuld-image-gen",
+  "version": "0.0.1",
+  "description": "a simple abstract image generator",
+  "main": "main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+git@github.com:Bielwenass/skuld.git"
+  },
+  "keywords": [
+    "abstract",
+    "image",
+    "generator"
+  ],
+  "author": "Bielwenass",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Bielwenass/skuld/issues"
+  },
+  "homepage": "https://github.com/Bielwenass/skuld#readme",
+  "dependencies": {
+    "fs": "0.0.1-security",
+    "jimp": "^0.2.28"
+  }
+}
