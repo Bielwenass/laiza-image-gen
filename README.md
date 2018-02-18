@@ -43,12 +43,16 @@ USE_TEST - Enable testing of the custom filter. False by default.
 ## Filters
 ### Circles
 <img src="https://imgur.com/it61PCT.png" width="400" height="400">
+
 ### Swirl
 <img src="https://imgur.com/oHUXJWH.png" width="400" height="400">
+
 ### Coslines
 <img src="https://imgur.com/g7ZhTGZ.png" width="400" height="400">
+
 ### Sinlines
 <img src="https://imgur.com/eI7UDsE.png" width="400" height="400">
+
 ### Tangrad
 <img src="https://imgur.com/n1FukFT.png" width="400" height="400">
 
