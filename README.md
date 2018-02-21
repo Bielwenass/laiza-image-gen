@@ -1,6 +1,7 @@
 # Laiza Image Generator
 This is a simple abstract image generator for Node.js built on Jimp library. You can control the generation process through settings.
 
+Important! I recently updated the generator and many new features / filters are not covered in this readme file. You can find a brief description inside main.js, and the readme will be updated in a bit.
 
 ### Available settings
 These can be changed right at the top of main.js
