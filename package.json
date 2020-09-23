@@ -23,6 +23,6 @@
   "homepage": "https://github.com/Bielwenass/laiza-image-gen#readme",
   "dependencies": {
     "fs": "0.0.1-security",
-    "jimp": "^0.2.28"
+    "jimp": "^0.16.1"
   }
 }
