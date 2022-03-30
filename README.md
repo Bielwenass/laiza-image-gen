@@ -6,14 +6,14 @@ Different mathematical functions that control the color channels (called "filter
 
 ## Examples of generated images
 <p>
-	<img src="https://imgur.com/DhPatow.png" width="400">
-	<img src="https://imgur.com/Vo0uxLR.png" width="400">
-  <img src="https://imgur.com/ShslMO2.png" width="400">
-  <img src="https://imgur.com/KYEjeZb.png" width="400">
-  <img src="https://imgur.com/sv8hEwx.png" width="400">
-	<img src="https://imgur.com/n9NwdDV.png" width="400">
-	<img src="https://imgur.com/hiaQtDf.png" width="400">
-	<img src="https://imgur.com/4u4O3Yb.png" width="400">
+  <img src="https://imgur.com/DhPatow.png" width="350">
+  <img src="https://imgur.com/Vo0uxLR.png" width="350">
+  <img src="https://imgur.com/ShslMO2.png" width="350">
+  <img src="https://imgur.com/KYEjeZb.png" width="350">
+  <img src="https://imgur.com/sv8hEwx.png" width="350">
+  <img src="https://imgur.com/n9NwdDV.png" width="350">
+  <img src="https://imgur.com/hiaQtDf.png" width="350">
+  <img src="https://imgur.com/4u4O3Yb.png" width="350">
 </p>
 
 ## Setup
@@ -108,9 +108,9 @@ Samples of all implemented filters. Shown are 1, 2 and 3 iterations of a given f
 
 ### Powsubtract
 <p>
-	<img src="https://imgur.com/timzxgR.png" width="250">
-	<img src="https://imgur.com/FFO6iVI.png" width="250">
-	<img src="https://imgur.com/5cV5Ee3.png" width="250">
+  <img src="https://imgur.com/timzxgR.png" width="250">
+  <img src="https://imgur.com/FFO6iVI.png" width="250">
+  <img src="https://imgur.com/5cV5Ee3.png" width="250">
 </p>
 
 License: MIT
