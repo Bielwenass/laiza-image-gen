@@ -1,8 +1,9 @@
 {
   "name": "laiza-image-gen",
-  "version": "0.0.1",
-  "description": "a simple abstract image generator",
+  "version": "1.0.0",
+  "description": "A simple random abstract image generator",
   "main": "main.js",
+  "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -11,6 +12,7 @@
     "url": "https://github.com/Bielwenass/laiza-image-gen.git"
   },
   "keywords": [
+    "random",
     "abstract",
     "image",
     "generator"
@@ -24,5 +26,12 @@
   "dependencies": {
     "fs": "0.0.1-security",
     "jimp": "^0.16.1"
+  },
+  "devDependencies": {
+    "eslint": "^7.32.0",
+    "eslint-config-standard": "^16.0.3",
+    "eslint-plugin-import": "^2.25.4",
+    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-promise": "^5.2.0"
   }
 }

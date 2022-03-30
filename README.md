@@ -1,61 +1,116 @@
 # Laiza Image Generator
-This is a simple abstract image generator for Node.js built on Jimp library. You can control the generation process through settings.
+A simple random abstract image generator on Node.js, built with the Jimp library.
 
-Important! I recently updated the generator and many new features / filters are not covered in this readme file. You can find a brief description inside main.js, and the readme will be updated in a bit.
+## Generation process
+Different mathematical functions that control the color channels (called "filters" from now on) are applied on top of each other to create chaotic patterns that sometimes result in interesting images.
 
-### Available settings
-These can be changed right at the top of main.js
+## Examples of generated images
+<p>
+	<img src="https://imgur.com/DhPatow.png" width="400">
+	<img src="https://imgur.com/Vo0uxLR.png" width="400">
+  <img src="https://imgur.com/ShslMO2.png" width="400">
+  <img src="https://imgur.com/KYEjeZb.png" width="400">
+  <img src="https://imgur.com/sv8hEwx.png" width="400">
+	<img src="https://imgur.com/n9NwdDV.png" width="400">
+	<img src="https://imgur.com/hiaQtDf.png" width="400">
+	<img src="https://imgur.com/4u4O3Yb.png" width="400">
+</p>
 
-RESOLUTION - Pretty straightforward: resolution of the output pic (all the pictures are square). 1024 by default.
+## Setup
+Node v17 is recommended.
+```
+git clone git@github.com:Bielwenass/laiza-image-gen.git
+cd laiza-image-gen
+yarn
+node src/main.js
+```
 
-ITER_COUNT - Number of iterations to be processed. 20 by default.
+## Available settings
+Can be changed in `settings.js`.
 
-SAVE_ALL_ITERS - Save all iterations or only the final one. Keeping this true is recommended since often the final pic looks worse than the ones before it. True by default.
+`resolution`: Width and height of the output pics (in pixels).
 
-RANDOM_FILTERS = Randomize what filters will be used. All filters have a 80% chance to appear. False by default.
+`iterationsCount`: Number of times filters will be applied. Lower values will make the result simplistic, and higher values will make it more complex (or, potentially, messy).
 
-USE_CIRCLES - Enable the "circles" filter. True by default.
+`imagesCount`: Number of images to generate.
 
-USE_SINLINES - Enable the "sinlines" filter. True by default.
+`saveAllIterations`: Save all iterations or only the final one. The progress pics sometimes look better than the final output, especially with high `iterationsCount`. Useful for understanding how different filters affect the end result. Off by default.
 
-USE_COSLINES - Enable the "coslines" filter. True by default.
+`enableRandomNames`: Assign random filenames on save. Useful if you wish to generate multiple batches of images without new ones overwriting the old ones.
 
-USE_SWIRL - Enable the "swirl" filter. True by default.
+`saturationPredefined`: Images are desaturated by a random amount by default - colors are usually too intense, so this was introduced for more variety. However, if this value is set, it will always be used to control the saturation, with 1 meaning full saturation, 0 meaning black & white images, and everything inbetween.
 
-USE_TANGRAD - Enable the "tangrad" filter. True by default.
+`genMode`: Possible values are `normal`, `random`, and `test`.
+- `normal` uses filters set to true in `filtersToUse`
+- `random` uses randomly selected filters for each image (50% chance for each filter)
+- `test` only uses the test filter
 
-USE_TEST - Enable testing of the custom filter. False by default.
-
-
-## Some examples of images you can get
-
-<img src="https://imgur.com/DhPatow.png" width="400" height="400">
-<img src="https://imgur.com/KYEjeZb.png" width="400" height="400">
-<img src="https://imgur.com/sv8hEwx.png" width="400" height="400">
-<img src="https://imgur.com/4u4O3Yb.png" width="400" height="400">
-
-## Though many of the times they will look like these
-
-<img src="https://imgur.com/r5khsAX.png" width="400" height="400">
-<img src="https://imgur.com/gOFqZ7H.png" width="400" height="400">
-<img src="https://imgur.com/X8JSegd.png" width="400" height="400">
-<img src="https://imgur.com/8SzeXNf.png" width="400" height="400">
+`filtersToUse`: Controls which filters are enabled in the normal generation mode.
 
 ## Filters
+Samples of all implemented filters. Shown are 1, 2 and 3 iterations of a given filter applied to a blank image.
+
 ### Circles
-<img src="https://imgur.com/it61PCT.png" width="400" height="400">
+<p>
+  <img src="https://imgur.com/Ef7O3Ef.png" width="250">
+  <img src="https://imgur.com/kOVO4Zb.png" width="250">
+  <img src="https://imgur.com/sSZnyR5.png" width="250">
+</p>
 
 ### Swirl
-<img src="https://imgur.com/oHUXJWH.png" width="400" height="400">
-
-### Coslines
-<img src="https://imgur.com/g7ZhTGZ.png" width="400" height="400">
+<p>
+  <img src="https://imgur.com/wpRNdMd.png" width="250">
+  <img src="https://imgur.com/PqdChcj.png" width="250">
+  <img src="https://imgur.com/QuD4Sev.png" width="250">
+</p>
 
 ### Sinlines
-<img src="https://imgur.com/eI7UDsE.png" width="400" height="400">
+<p>
+  <img src="https://imgur.com/0kvgppk.png" width="250">
+  <img src="https://imgur.com/AUpZG52.png" width="250">
+  <img src="https://imgur.com/vabLjSG.png" width="250">
+</p>
+
+### Coslines
+<p>
+  <img src="https://imgur.com/FIgCRzr.png" width="250">
+  <img src="https://imgur.com/2En5YIL.png" width="250">
+  <img src="https://imgur.com/XGvsJxU.png" width="250">
+</p>
+
+### Gradient
+<p>
+  <img src="https://imgur.com/5dFhRMy.png" width="250">
+  <img src="https://imgur.com/t6HrkKJ.png" width="250">
+  <img src="https://imgur.com/OGbqVxM.png" width="250">
+</p>
 
 ### Tangrad
-<img src="https://imgur.com/n1FukFT.png" width="400" height="400">
+<p>
+  <img src="https://imgur.com/rCHaEHD.png" width="250">
+  <img src="https://imgur.com/1k99FQd.png" width="250">
+  <img src="https://imgur.com/oHNNnbF.png" width="250">
+</p>
 
+### Fuzzy
+<p>
+  <img src="https://imgur.com/q0oZ1Qr.png" width="250">
+  <img src="https://imgur.com/E2TCeOm.png" width="250">
+  <img src="https://imgur.com/4pIk31h.png" width="250">
+</p>
+
+### Powremain
+<p>
+  <img src="https://imgur.com/20XmC4u.png" width="250">
+  <img src="https://imgur.com/zkXpqjA.png" width="250">
+  <img src="https://imgur.com/bme1mD6.png" width="250">
+</p>
+
+### Powsubtract
+<p>
+	<img src="https://imgur.com/timzxgR.png" width="250">
+	<img src="https://imgur.com/FFO6iVI.png" width="250">
+	<img src="https://imgur.com/5cV5Ee3.png" width="250">
+</p>
 
 License: MIT
